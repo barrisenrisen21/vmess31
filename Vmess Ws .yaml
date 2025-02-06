@@ -1,0 +1,429 @@
+---
+proxies:
+
+- name: GAME 
+  server: 104.26.7.171
+    port: 80
+    type: vmess
+    uuid: 04845960-e3fe-11ef-b235-205c6d5f5d78
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    servername: eu-2.hihu.net
+    network: ws
+    ws-opts:
+      path: /196l3vn7
+      headers:
+        Host: eu-2.hihu.net
+    udp: true
+
+- name: SOSMED 
+  server: 104.26.7.171
+    port: 80
+    type: vmess
+    uuid: 2e40f170-e3fd-11ef-b835-205c6d5f5d78
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    servername: sg-1.hihu.net
+    network: ws
+    ws-opts:
+      path: /o4sjmln0
+      headers:
+        Host: sg-1.hihu.net
+    udp: true
+
+- name: STREAM
+  server: 104.26.7.171
+    port: 80
+    type: vmess
+    uuid: 9724a7b0-e3fd-11ef-b231-205c6d5f5d78
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    servername: us-23.hihu.net
+    network: ws
+    ws-opts:
+      path: /eiw2k4pu
+      headers:
+        Host: us-23.hihu.net
+    udp: true
+  
+- name: BROWSER
+  server: 104.26.7.171
+    port: 80
+    type: vmess
+    uuid: c53ed730-e3fd-11ef-b537-205c6d5f5d78
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    servername: us-21.hihu.net
+    network: ws
+    ws-opts:
+      path: /sm64cw7d
+      headers:
+        Host: us-21.hihu.net
+    udp: true
+
+
+proxy-groups:
+- name: Game
+  type: url-test
+  disable-udp: false
+  proxies:
+  - GAME
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+  tolerance: '150'
+- name: Sosmed
+  type: url-test
+  disable-udp: false
+  proxies:
+  - SOSMED
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+  tolerance: '150'
+- name: Stream
+  type: url-test
+  disable-udp: false
+  proxies:
+  - STREAM
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+  tolerance: '150'
+- name: Browser
+  type: url-test
+  disable-udp: false
+  proxies:
+  - BROWSER
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+  tolerance: '150'
+- name: Sosmed Game Stream Browser
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  proxies:
+  - Sosmed
+  - Game
+  - Stream
+  - Browser
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+redir-port: 7892
+port: 7890
+socks-port: 7891
+mixed-port: 7893
+mode: global
+log-level: silent
+allow-lan: true
+external-controller: 0.0.0.0:9090
+secret: reyre
+bind-address: "*"
+external-ui: "/usr/share/openclash/dashboard"
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: redir-host
+  listen: 127.0.0.1:7874
+  nameserver:
+  - 114.114.114.114
+  - 119.29.29.29
+  fallback:
+  - https://cloudflare-dns.com/dns-query
+  - https://dns.google/dns-query
+  - https://1.1.1.1/dns-query
+  - tls://8.8.8.8:853
+  fallback-filter:
+    geoip: true
+    ipcidr:
+    - 0.0.0.0/8
+    - 10.0.0.0/8
+    - 100.64.0.0/10
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 172.16.0.0/12
+    - 192.0.0.0/24
+    - 192.0.2.0/24
+    - 192.88.99.0/24
+    - 192.168.0.0/16
+    - 198.18.0.0/15
+    - 198.51.100.0/24
+    - 203.0.113.0/24
+    - 224.0.0.0/4
+    - 240.0.0.0/4
+    - 255.255.255.255/32
+    domain:
+    - "+.google.com"
+    - "+.facebook.com"
+    - "+.youtube.com"
+    - "+.githubusercontent.com"
+ipv6: false
+profile:
+  store-selected: true
+rules:
+- IP-CIDR,198.18.0.1/16,REJECT,no-resolve
+# BROWSER dan STREAM
+- DOMAIN-KEYWORD,*.google.com,Browser
+- DOMAIN-KEYWORD,*.appengine.google.com,Browser
+- DOMAIN-KEYWORD,*.bdn.dev,Browser
+- DOMAIN-KEYWORD,*.cloud.google.com,Browser
+- DOMAIN-KEYWORD,*.crowdsource.google.com,Browser
+- DOMAIN-KEYWORD,*.datacompute.google.com,Browser
+- DOMAIN-KEYWORD,*.google.ca,Browser
+- DOMAIN-KEYWORD,*.google.cl,Browser
+- DOMAIN-KEYWORD,*.google.co.in,Browser
+- DOMAIN-KEYWORD,.google.co.jp,Browser
+- DOMAIN-KEYWORD,*.google.co.uk,Browser
+- DOMAIN-KEYWORD,*.google.com.ar,Browser
+- DOMAIN-KEYWORD,*.google.com.au,Browser
+- DOMAIN-KEYWORD,*.google.com.br,Browser
+- DOMAIN-KEYWORD,*.google.com.co,Browser
+- DOMAIN-KEYWORD,*.google.com.mx,Browser
+- DOMAIN-KEYWORD,*.google.com.tr,Browser
+- DOMAIN-KEYWORD,*.google.com.vn,Browser
+- DOMAIN-KEYWORD,*.google.de,Browser
+- DOMAIN-KEYWORD,*.google.es,Browser
+- DOMAIN-KEYWORD,*.google.fr,Browser
+- DOMAIN-KEYWORD,*.google.hu,Browser
+- DOMAIN-KEYWORD,*.google.it,Browser
+- DOMAIN-KEYWORD,*.google.nl,Browser
+- DOMAIN-KEYWORD,*.google.pl,Browser
+- DOMAIN-KEYWORD,*.google.pt,Browser
+- DOMAIN-KEYWORD,*.googleadapis.com,Browser
+- DOMAIN-KEYWORD,*.googleapis.cn,Browser
+- DOMAIN-KEYWORD,*.googlevideo.com,Browser
+- DOMAIN-KEYWORD,*.gstatic.cn,Browser
+- DOMAIN-KEYWORD,*.gstatic-cn.com,Browser
+- DOMAIN-KEYWORD,*.gstaticcnapps.cn,Browser
+- DOMAIN-KEYWORD,googlecnapps.cn,Browser
+- DOMAIN-KEYWORD,*.googlecnapps.cn,Browser
+- DOMAIN-KEYWORD,gkecnapps.cn,Browser
+- DOMAIN-KEYWORD,*.gkecnapps.cn,Browser
+- DOMAIN-KEYWORD,googledownloads.cn,Browser
+- DOMAIN-KEYWORD,*.googledownloads.cn,Browser
+- DOMAIN-KEYWORD,recaptcha.net.cn,Browser
+- DOMAIN-KEYWORD,*.recaptcha.net.cn,Browser
+- DOMAIN-KEYWORD,widevine.cn,Browser
+- DOMAIN-KEYWORD,*.widevine.cn,Browser
+- DOMAIN-KEYWORD,ampproject.org.cn,Browser
+- DOMAIN-KEYWORD,*.ampproject.org.cn,Browser
+- DOMAIN-KEYWORD,ampproject.net.cn,Browser
+- DOMAIN-KEYWORD,*.ampproject.net.cn,Browser
+- DOMAIN-KEYWORD,google-analytics-cn.com,Browser
+- DOMAIN-KEYWORD,*.google-analytics-cn.com,Browser
+- DOMAIN-KEYWORD,googleadservices-cn.com,Browser
+- DOMAIN-KEYWORD,*.googleadservices-cn.com,Browser
+- DOMAIN-KEYWORD,googlevads-cn.com,Browser
+- DOMAIN-KEYWORD,*.googlevads-cn.com,Browser
+- DOMAIN-KEYWORD,googleapis-cn.com,Browser
+- DOMAIN-KEYWORD,*.googleapis-cn.com,Browser
+- DOMAIN-KEYWORD,googleoptimize-cn.com,Browser
+- DOMAIN-KEYWORD,*.googleoptimize-cn.com,Browser
+- DOMAIN-KEYWORD,doubleclick-cn.net,Browser
+- DOMAIN-KEYWORD,*.doubleclick-cn.net,Browser
+- DOMAIN-KEYWORD,*.fls.doubleclick-cn.net,Browser
+- DOMAIN-KEYWORD,*.g.doubleclick-cn.net,Browser
+- DOMAIN-KEYWORD,dartsearch-cn.net,Browser
+- DOMAIN-KEYWORD,*.dartsearch-cn.net,Browser
+- DOMAIN-KEYWORD,googletraveladservices-cn.com,Browser
+- DOMAIN-KEYWORD,*.googletraveladservices-cn.com,Browser
+- DOMAIN-KEYWORD,googletagservices-cn.com,Browser
+- DOMAIN-KEYWORD,*.googletagservices-cn.com,Browser
+- DOMAIN-KEYWORD,googletagmanager-cn.com,Browser
+- DOMAIN-KEYWORD,*.googletagmanager-cn.com,Browser
+- DOMAIN-KEYWORD,googlesyndication-cn.com,Browser
+- DOMAIN-KEYWORD,*.googlesyndication-cn.com,Browser
+- DOMAIN-KEYWORD,*.safeframe.googlesyndication-cn.com,Browser
+- DOMAIN-KEYWORD,app-measurement-cn.com,Browser
+- DOMAIN-KEYWORD,*.app-measurement-cn.com,Browser
+- DOMAIN-KEYWORD,gvt1-cn.com,Stream
+- DOMAIN-KEYWORD,*.gvt1-cn.com,Stream
+- DOMAIN-KEYWORD,gvt2-cn.com,Stream
+- DOMAIN-KEYWORD,*.gvt2-cn.com,Stream
+- DOMAIN-KEYWORD,2mdn-cn.net,Browser
+- DOMAIN-KEYWORD,*.2mdn-cn.net,Browser
+- DOMAIN-KEYWORD,googleflights-cn.net,Browser
+- DOMAIN-KEYWORD,*.googleflights-cn.net,Browser
+- DOMAIN-KEYWORD,admob-cn.com,Browser
+- DOMAIN-KEYWORD,*.admob-cn.com,Browser
+- DOMAIN-KEYWORD,*.gstatic.com,Browser
+- DOMAIN-KEYWORD,*.metric.gstatic.com,Browser
+- DOMAIN-KEYWORD,*.gvt1.com,Stream
+- DOMAIN-KEYWORD,*.gcpcdn.gvt1.com,Stream
+- DOMAIN-KEYWORD,*.gvt2.com,Stream
+- DOMAIN-KEYWORD,*.gcp.gvt2.com,Stream
+- DOMAIN-KEYWORD,*.url.google.com,Browser
+- DOMAIN-KEYWORD,*.youtube-nocookie.com,Stream
+- DOMAIN-KEYWORD,*.ytimg.com,Stream
+- DOMAIN-KEYWORD,android.com,Browser
+- DOMAIN-KEYWORD,*.android.com,Browser
+- DOMAIN-KEYWORD,*.flash.android.com,Browser
+- DOMAIN-KEYWORD,g.cn,Browser
+- DOMAIN-KEYWORD,*.g.cn,Browser
+- DOMAIN-KEYWORD,g.co,Browser
+- DOMAIN-KEYWORD,*.g.co,Browser
+- DOMAIN-KEYWORD,goo.gl,Browser
+- DOMAIN-KEYWORD,www.goo.gl,Browser
+- DOMAIN-KEYWORD,google-analytics.com,Browser
+- DOMAIN-KEYWORD,*.google-analytics.com,Browser
+- DOMAIN-KEYWORD,google.com,Browser,Browser
+- DOMAIN-KEYWORD,googlecommerce.com,Browser
+- DOMAIN-KEYWORD,*.googlecommerce.com,Browser
+- DOMAIN-KEYWORD,ggpht.cn,Browser
+- DOMAIN-KEYWORD,*.ggpht.cn,Browser
+- DOMAIN-KEYWORD,urchin.com,Browser
+- DOMAIN-KEYWORD,*.urchin.com,Browser
+- DOMAIN-KEYWORD,youtu.be,Stream
+- DOMAIN-KEYWORD,youtube.com,Stream
+- DOMAIN-KEYWORD,*.youtube.com,Stream
+- DOMAIN-KEYWORD,youtubeeducation.com,Stream
+- DOMAIN-KEYWORD,*.youtubeeducation.com,Stream
+- DOMAIN-KEYWORD,youtubekids.com,Stream
+- DOMAIN-KEYWORD,*.youtubekids.com,Stream
+- DOMAIN-KEYWORD,yt.be,Stream
+- DOMAIN-KEYWORD,*.yt.be,Stream
+- DOMAIN-KEYWORD,android.clients.google.com,Browser
+- DOMAIN-KEYWORD,developer.android.google.cn,Browser
+- DOMAIN-KEYWORD,developers.android.google.cn,Browser
+- DOMAIN-KEYWORD,source.android.google.cn,Browser
+- DOMAIN-KEYWORD,source.android.google.cn,Browser
+- DOMAIN-KEYWORD,hotstar.com,Stream
+- DOMAIN-KEYWORD,*.hotstar.com,Stream
+- DOMAIN-KEYWORD,mola.tv,Stream
+- DOMAIN-KEYWORD,*.mola.tv,Stream
+- DOMAIN-KEYWORD,www.vidio.com,Stream
+- DOMAIN-KEYWORD,www.static6.com,Stream
+- DOMAIN-KEYWORD,www.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,www.iap.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,www-dsa.vidio.com,Stream
+- DOMAIN-KEYWORD,www-dsa.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,vidio.com,Stream
+- DOMAIN-KEYWORD,tv.vidio.com,Stream
+- DOMAIN-KEYWORD,tv.int.vidio.com,Stream
+- DOMAIN-KEYWORD,tv-canary.vidio.com,Stream
+- DOMAIN-KEYWORD,tv-canary-vpn.vidio.com,Stream
+- DOMAIN-KEYWORD,stickers.vidio.com,Stream
+- DOMAIN-KEYWORD,static6.com,Stream
+- DOMAIN-KEYWORD,staging.vidio.com,Stream
+- DOMAIN-KEYWORD,quiz.vidio.com,Stream
+- DOMAIN-KEYWORD,quiz.int.vidio.com,Stream
+- DOMAIN-KEYWORD,personalization.vidio.com,Stream
+- DOMAIN-KEYWORD,personalization.int.vidio.com,Stream
+- DOMAIN-KEYWORD,microsite.static6.com,Stream
+- DOMAIN-KEYWORD,m.vidio.com,Stream
+- DOMAIN-KEYWORD,m.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,m.iap.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,lite.vidio.com,Stream
+- DOMAIN-KEYWORD,lite.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,iap.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,iap.api.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,api.vidio.com,Stream
+- DOMAIN-KEYWORD,api.staging.vidio.com,Stream
+- DOMAIN-KEYWORD,api.iap.staging.vidio.com,Stream
+# GAME
+- DOMAIN-KEYWORD,mobilelegends.com,Game
+- DOMAIN-KEYWORD,*.mobilelegends.com,Game
+- DOMAIN-KEYWORD,pubg.com,Game
+- DOMAIN-KEYWORD,*pubg.com,Game
+- DOMAIN-KEYWORD,battlegrounds.pubg.com,Game
+- DOMAIN-KEYWORD,*.battlegrounds.pubg.com,Game
+- DOMAIN-KEYWORD,garena.co.id,Game
+- DOMAIN-KEYWORD,*.garena.co.id,Game
+- DOMAIN-KEYWORD,garena.com,Game
+- DOMAIN-KEYWORD,www.garena.com,Game
+- DOMAIN-KEYWORD,*.garena.com,Game
+- DOMAIN-KEYWORD,*.lytogame.com,Game
+- DOMAIN-KEYWORD,lytogame.com,Game
+- DOMAIN-SUFFIX,mobile.legends,Game
+- DOMAIN-SUFFIX,mobile-legends.net,Game
+- DOMAIN-SUFFIX,sl-reverse.com,Game
+- DOMAIN-SUFFIX,akamaitechnologies.com,Game
+- DOMAIN-SUFFIX,youngjoygame.com,Game
+- DOMAIN-SUFFIX,yuanzhapp.com,Game
+- DOMAIN-SUFFIX,aihelp.net,Game
+- DOMAIN-SUFFIX,adjust.net.in,Game
+- DST-PORT,30190,Game
+- DST-PORT,30220,Game
+- DST-PORT,30021,Game
+- DST-PORT,10003,Game
+#scanjanuari 
+- IP-CIDR,200.25.11.1/16,Game 
+- IP-CIDR,103.16.137.22/16 ,Game 
+- IP-CIDR,128.14.140.38/16 ,Game 
+- IP-CIDR,159.122.113.146/16 ,Game 
+- IP-CIDR,117.103.116.26/24 ,Game 
+- IP-CIDR,163.171.220.15/24 ,Game 
+- IP-CIDR,114.125.115.16/24 ,Game 
+- IP-CIDR,58.26.7.254/24 ,Game 
+- IP-CIDR,31.13.95.1/24 ,Game 
+- IP-CIDR,185.151.204.31/24 ,Game 
+- IP-CIDR,103.138.247.78/24 ,Game 
+- IP-CIDR,169.46.198.115/16 ,Game 
+- IP-CIDR,169.44.1.1/16 ,Game 
+- IP-CIDR,45.43.33.78/16 ,Game 
+- IP-CIDR,148.153.34.190/16 ,Game 
+- IP-CIDR,74.125.70.120/24 ,Game 
+- IP-CIDR,107.155.14.146/16 ,Game 
+- IP-CIDR,122.10.139.106/16 ,Game 
+- IP-CIDR,128.14.140.38/16 ,Game 
+- IP-CIDR,59.153.158.40/16 ,Game 
+- IP-CIDR,94.97.239.35/16 ,Game 
+- IP-CIDR,200.55.245.166/16 ,Game 
+- IP-CIDR,182.93.78.14/16 ,Game 
+- IP-CIDR,142.250.4.154/24 ,Game 
+- IP-CIDR,23.236.118.218/16 ,Game 
+- IP-CIDR,23.248.168.168/16 ,Game 
+- IP-CIDR,169.45.173.38/24 ,Game 
+- IP-CIDR,202.131.87.90/16,Game 
+# SOSMED
+- DOMAIN-KEYWORD,*.facebook.com,Sosmed
+- DOMAIN-KEYWORD,*.facebook.net,Sosmed
+- DOMAIN-KEYWORD,*.fbcdn.net,Sosmed
+- DOMAIN-KEYWORD,*.fbsbx.com,Sosmed
+- DOMAIN-KEYWORD,*.m.facebook.com,Sosmed
+- DOMAIN-KEYWORD,*.messenger.com,Sosmed
+- DOMAIN-KEYWORD,*.xx.fbcdn.net,Sosmed
+- DOMAIN-KEYWORD,*.xy.fbcdn.net,Sosmed
+- DOMAIN-KEYWORD,*.xz.fbcdn.net,Sosmed
+- DOMAIN-KEYWORD,facebook.com,Sosmed
+- DOMAIN-KEYWORD,messenger.com,Sosmed
+- DOMAIN-KEYWORD,m.instagram.com,Sosmed
+- DOMAIN-KEYWORD,*.m.instagram.com,Sosmed
+- DOMAIN-KEYWORD,*.cdn.whatsapp.net,Sosmed
+- DOMAIN-KEYWORD,*.snr.whatsapp.net,Sosmed
+- DOMAIN-KEYWORD,*.whatsapp.com,Sosmed
+- DOMAIN-KEYWORD,*.whatsapp.net,Sosmed
+- DOMAIN-KEYWORD,wa.me,Sosmed
+- DOMAIN-KEYWORD,whatsapp.com,Sosmed
+- DOMAIN-KEYWORD,whatsapp.net,Sosmed
+- DOMAIN-KEYWORD,twitter.com,Sosmed
+- DOMAIN-KEYWORD,www.twitter.com,Sosmed
+- DOMAIN-KEYWORD,reddit.com,Sosmed
+- DOMAIN-KEYWORD,*.reddit.com,Sosmed
+# SPEEDTEST
+- DOMAIN-KEYWORD,*.speedtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.cdnst.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.cellmaps.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.dualstack.speedtestcustom.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.ekahau.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.host.speedtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.ipv4-only.speedtestcustom.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.ookla.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.pingtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.speedtest.co,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.speedtestcustom.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,*.webtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,cdnst.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,ekahau.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,ookla.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,pingtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,speedtest.co,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,speedtestcustom.com,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,videoqoe.stvidtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,webtest.net,Browser,Game,Sosmed,Stream
+- DOMAIN-KEYWORD,speedtest.net,Browser,Game,Sosmed,Stream
